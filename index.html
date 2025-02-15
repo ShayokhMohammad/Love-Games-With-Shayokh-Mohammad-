@@ -9,8 +9,30 @@
             text-align: center;
             font-family: Arial, sans-serif;
             margin-top: 100px;
-            background-color: #ffe6e6;
+            background-color: black;
+            color: white;
+            position: relative;
+            overflow: hidden;
         }
+
+        .background-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 50px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            user-select: none;
+            pointer-events: none;
+        }
+
         .btn {
             font-size: 20px;
             padding: 10px 20px;
@@ -20,19 +42,23 @@
             border-radius: 5px;
             transition: 0.3s;
         }
+
         .btn:hover {
             transform: scale(1.1);
         }
+
         #yes {
             background-color: #ff4d4d;
             color: white;
         }
+
         #no {
             position: absolute;
             background-color: #808080;
             color: white;
             transition: all 0.2s ease;
         }
+
         #hearts {
             position: fixed;
             top: 0;
@@ -41,17 +67,40 @@
             font-size: 30px;
             display: none;
         }
+
+        .message {
+            font-size: 24px;
+            font-weight: bold;
+            display: none;
+            margin-top: 20px;
+        }
+
+        .gift-box {
+            display: none;
+            font-size: 40px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <div class="background-text">
+        Shayokh Mohammad Shayokh Mohammad Shayokh Mohammad Shayokh Mohammad Shayokh Mohammad Shayokh Mohammad
+    </div>
+
     <h1>Do you love me? 🥰</h1>
     <button class="btn" id="yes" onclick="loveYou()">Yes ❤️</button>
-    <button class="btn" id="no" onmouseover="moveButton()">No 😜</button>
+    <button class="btn" id="no" onmouseover="moveButton()" onclick="noClick()">No 😜</button>
 
     <div id="hearts">❤️❤️❤️</div>
+    <div class="message" id="message"></div>
+    <div class="gift-box" id="gift" onclick="openGift()">🎁</div>
 
-    <audio id="loveSound" src="https://www.fesliyanstudios.com/play-mp3/4382"></audio>
-    <audio id="oopsSound" src="https://www.fesliyanstudios.com/play-mp3/4383"></audio>
+    <!-- ব্যাকগ্রাউন্ড মিউজিক -->
+    <audio id="bgMusic" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
+
+    <!-- "No" এর জন্য সাউন্ড -->
+    <audio id="oopsSound" src="https://www.fesliyanstudios.com/play-mp3/402" preload="auto"></audio>
 
     <script>
         function moveButton() {
@@ -61,24 +110,43 @@
             button.style.left = x + "px";
             button.style.top = y + "px";
 
-            // "No" বাটন ছোট হতে থাকবে
-            let currentSize = parseInt(window.getComputedStyle(button).fontSize);
-            if (currentSize > 10) {
-                button.style.fontSize = (currentSize - 2) + "px";
+            let opacity = parseFloat(window.getComputedStyle(button).opacity);
+            if (opacity > 0.1) {
+                button.style.opacity = opacity - 0.1;
             }
 
-            // ফানি সাউন্ড প্লে করাও
             document.getElementById("oopsSound").play();
+            setTimeout(() => {
+                document.getElementById("oopsSound").pause();
+                document.getElementById("oopsSound").currentTime = 0;
+            }, 5000);
         }
 
         function loveYou() {
-            alert("I love you too! ❤️🥰");
-            document.getElementById("loveSound").play();
+            document.getElementById("bgMusic").play();
+            let message = document.getElementById("message");
+            message.innerText = "";
+            message.style.display = "block";
+            let text = "I Knew It! You're Mine! ❤️";
+            let i = 0;
+            function typeEffect() {
+                if (i < text.length) {
+                    message.innerText += text.charAt(i);
+                    i++;
+                    setTimeout(typeEffect, 100);
+                } else {
+                    document.getElementById("gift").style.display = "block";
+                }
+            }
+            typeEffect();
+        }
 
-            // স্ক্রিনে লাভ হার্ট ঝরানো
-            let hearts = document.getElementById("hearts");
-            hearts.style.display = "block";
-            hearts.style.animation = "fall 2s linear forwards";
+        function noClick() {
+            alert("I'm Watching You! 👀");
+        }
+
+        function openGift() {
+            alert("I love you too! ❤️🎁");
         }
     </script>
 </body>
