@@ -23,7 +23,7 @@
             height: 100%;
             font-size: 50px;
             font-weight: bold;
-            color: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.1); /* opacity বাড়ানো হয়েছে */
             display: flex;
             flex-wrap: wrap;
             align-items: center;
@@ -56,7 +56,7 @@
             position: absolute;
             background-color: #808080;
             color: white;
-            transition: all 0.2s ease;
+            transition: all 0.5s ease;
         }
 
         #hearts {
@@ -80,6 +80,23 @@
             font-size: 40px;
             margin-top: 20px;
             cursor: pointer;
+        }
+
+        .flower {
+            position: absolute;
+            font-size: 30px;
+            animation: fall 2s linear forwards;
+        }
+
+        @keyframes fall {
+            from {
+                transform: translateY(-50px);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(500px);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -109,11 +126,6 @@
             let y = Math.random() * (window.innerHeight - button.offsetHeight);
             button.style.left = x + "px";
             button.style.top = y + "px";
-
-            let opacity = parseFloat(window.getComputedStyle(button).opacity);
-            if (opacity > 0.1) {
-                button.style.opacity = opacity - 0.1;
-            }
 
             document.getElementById("oopsSound").play();
             setTimeout(() => {
@@ -147,6 +159,18 @@
 
         function openGift() {
             alert("I love you too! ❤️🎁");
+            for (let i = 0; i < 15; i++) {
+                let flower = document.createElement("div");
+                flower.innerText = "❀";
+                flower.classList.add("flower");
+                flower.style.left = Math.random() * window.innerWidth + "px";
+                flower.style.top = "-50px";
+                document.body.appendChild(flower);
+
+                setTimeout(() => {
+                    flower.remove();
+                }, 2000);
+            }
         }
     </script>
 </body>
