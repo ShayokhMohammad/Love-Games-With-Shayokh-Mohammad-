@@ -8,19 +8,30 @@
         body {
             text-align: center;
             font-family: Arial, sans-serif;
+            margin-top: 100px;
             background-color: black;
             color: white;
-            overflow: hidden;
-            transition: background 2s ease-in-out;
             position: relative;
+            overflow: hidden;
         }
 
-        .container {
+        /* ব্যাকগ্রাউন্ড টেক্সট */
+        .background-text {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 50px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.05); /* খুব হালকা লেখা */
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
             text-align: center;
+            user-select: none;
+            pointer-events: none;
         }
 
         .btn {
@@ -33,6 +44,10 @@
             transition: 0.3s;
         }
 
+        .btn:hover {
+            transform: scale(1.1);
+        }
+
         #yes {
             background-color: #ff4d4d;
             color: white;
@@ -42,168 +57,66 @@
             position: absolute;
             background-color: #808080;
             color: white;
-            transition: all 0.5s ease;
+            transition: all 0.2s ease;
         }
 
-        .message {
-            font-size: 24px;
-            font-weight: bold;
-            display: none;
-            margin-top: 20px;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-        }
-
-        .confetti, .rose {
-            position: absolute;
-            font-size: 30px;
-            animation: fall 2s linear forwards;
-        }
-
-        @keyframes fall {
-            from { transform: translateY(-50px); opacity: 1; }
-            to { transform: translateY(500px); opacity: 0; }
-        }
-
-        @keyframes rotateBg {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        #background-text {
-            position: absolute;
-            top: 50%;
+        #hearts {
+            position: fixed;
+            top: 0;
             left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 40px;
-            color: rgba(255, 255, 255, 0.2);
-            white-space: nowrap;
-        }
-
-        h1 {
-            font-size: 36px;
-            font-weight: bold;
+            transform: translateX(-50%);
+            font-size: 30px;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div id="background-text">Shayokh Mohammad</div>
-    <div class="container">
-        <h1 id="question">Do you love me? 🥰</h1>
-        <button class="btn" id="yes" onclick="loveYou()">Yes ❤️</button>
-        <button class="btn" id="no" onmouseover="moveButton()" onclick="noClick()">No 😜</button>
-        <div class="message" id="message"></div>
+    <div class="background-text">
+        Shayokh Mohammad Shayokh Mohammad Shayokh Mohammad Shayokh Mohammad Shayokh Mohammad Shayokh Mohammad Shayokh Mohammad Shayokh Mohammad
     </div>
 
-    <script>
-        let noClickCount = 0;
-        let isBgRotating = false;
+    <h1>Do you love me? 🥰</h1>
+    <button class="btn" id="yes" onclick="loveYou()">Yes ❤️</button>
+    <button class="btn" id="no" onmouseover="moveButton()">No 😜</button>
 
+    <div id="hearts">❤️❤️❤️</div>
+
+    <!-- সাউন্ড ফাইল -->
+    <audio id="loveSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
+    <audio id="oopsSound" src="https://www.fesliyanstudios.com/play-mp3/402" preload="auto"></audio>
+
+    <script>
         function moveButton() {
             let button = document.getElementById("no");
             let x = Math.random() * (window.innerWidth - button.offsetWidth);
             let y = Math.random() * (window.innerHeight - button.offsetHeight);
             button.style.left = x + "px";
             button.style.top = y + "px";
-        }
 
-        function noClick() {
-            let messages = [
-                "Are you sure? 😢", 
-                "Think again... 😟", 
-                "I'm breaking up with you! 💔", 
-                "Just kidding! 😂"
-            ];
-            playNoSound();
-            showMessage(messages[noClickCount % messages.length]);
+            // "No" বাটন ছোট হতে থাকবে
+            let currentSize = parseInt(window.getComputedStyle(button).fontSize);
+            if (currentSize > 10) {
+                button.style.fontSize = (currentSize - 2) + "px";
+            }
 
-            document.body.style.animation = "shake 0.2s";
+            // ফানি সাউন্ড ৫ সেকেন্ড বাজবে
+            let oopsSound = document.getElementById("oopsSound");
+            oopsSound.play();
             setTimeout(() => {
-                document.body.style.animation = "";
-            }, 200);
-
-            noClickCount++;
-            if (noClickCount >= 5) {
-                document.getElementById("question").innerText = "Okay... do you *at least* like me? 😢";
-            }
-
-            if (noClickCount > 7) {
-                document.body.style.transition = "background 3s ease-in-out";
-                document.body.style.backgroundColor = "black";
-            }
+                oopsSound.pause();
+                oopsSound.currentTime = 0;
+            }, 5000);
         }
 
         function loveYou() {
-            let colors = ["#ffcccc", "#ff99cc", "#ff66cc", "#ff33cc", "#cc33ff"];
-            let index = 0;
-            setInterval(() => {
-                document.body.style.backgroundColor = colors[index % colors.length];
-                index++;
-            }, 2000);
+            alert("I love you too! ❤️🥰");
+            let loveSound = document.getElementById("loveSound");
+            loveSound.play();
 
-            showMessage("I Knew It! You're Mine! ❤️");
-            playYesMusic();
-            startConfetti();
-            startRoseFall();
-
-            if (!isBgRotating) {
-                document.body.style.animation = "rotateBg 10s linear infinite";
-                isBgRotating = true;
-            }
-        }
-
-        function showMessage(text) {
-            let message = document.getElementById("message");
-            message.innerText = "";
-            message.style.display = "block";
-            let i = 0;
-            function typeEffect() {
-                if (i < text.length) {
-                    message.innerText += text.charAt(i);
-                    i++;
-                    setTimeout(typeEffect, 100);
-                }
-            }
-            typeEffect();
-        }
-
-        function startConfetti() {
-            for (let i = 0; i < 20; i++) {
-                let confetti = document.createElement("div");
-                confetti.innerText = "🎉";
-                confetti.classList.add("confetti");
-                confetti.style.left = Math.random() * window.innerWidth + "px";
-                confetti.style.top = "-50px";
-                document.body.appendChild(confetti);
-                setTimeout(() => { confetti.remove(); }, 2000);
-            }
-        }
-
-        function startRoseFall() {
-            for (let i = 0; i < 15; i++) {
-                let rose = document.createElement("div");
-                rose.innerText = "🌹";
-                rose.classList.add("rose");
-                rose.style.left = Math.random() * window.innerWidth + "px";
-                rose.style.top = "-50px";
-                document.body.appendChild(rose);
-                setTimeout(() => { rose.remove(); }, 2000);
-            }
-        }
-
-        function playYesMusic() {
-            let audio = new Audio('https://www.fesliyanstudios.com/play-mp3/387');
-            audio.play();
-        }
-
-        function playNoSound() {
-            let audio = new Audio('https://www.fesliyanstudios.com/play-mp3/438');
-            audio.play();
+            // স্ক্রিনে হার্ট ঝরানো
+            let hearts = document.getElementById("hearts");
+            hearts.style.display = "block";
+            hearts.style.animation = "fall 2s linear forwards";
         }
     </script>
 </body>
