@@ -13,6 +13,11 @@
             overflow: hidden;
             transition: background 2s ease-in-out;
             position: relative;
+            height: 100vh; /* Full viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
         }
 
         .background-text {
@@ -34,16 +39,12 @@
         }
 
         .container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            text-align: center;
         }
 
         h1 {
             font-size: 40px;
             margin-bottom: 20px;
-            text-align: center;
         }
 
         .btn {
