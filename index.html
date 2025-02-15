@@ -74,9 +74,20 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
+
+        #background-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            color: rgba(255, 255, 255, 0.2);
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
+    <div id="background-text">Shayokh Mohammad</div>
     <div class="container">
         <h1 id="question">Do you love me? 🥰</h1>
         <button class="btn" id="yes" onclick="loveYou()">Yes ❤️</button>
@@ -97,7 +108,12 @@
         }
 
         function noClick() {
-            let messages = ["Are you sure? 😢", "Think again... 😟", "I'm breaking up with you! 💔", "Just kidding! 😂"];
+            let messages = [
+                "Are you sure? 😢", 
+                "Think again... 😟", 
+                "I'm breaking up with you! 💔", 
+                "Just kidding! 😂"
+            ];
             playNoSound();
             showMessage(messages[noClickCount % messages.length]);
 
