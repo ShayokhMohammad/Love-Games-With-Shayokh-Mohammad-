@@ -15,12 +15,29 @@
             position: relative;
         }
 
+        .background-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 50px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            user-select: none;
+            pointer-events: none;
+        }
+
         .container {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            text-align: center;
         }
 
         .btn {
@@ -52,6 +69,13 @@
             margin-top: 20px;
         }
 
+        .gift-box {
+            display: none;
+            font-size: 40px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
@@ -59,7 +83,7 @@
             75% { transform: translateX(-5px); }
         }
 
-        .confetti, .rose {
+        .confetti {
             position: absolute;
             font-size: 30px;
             animation: fall 2s linear forwards;
@@ -69,40 +93,24 @@
             from { transform: translateY(-50px); opacity: 1; }
             to { transform: translateY(500px); opacity: 0; }
         }
-
-        @keyframes rotateBg {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        #background-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 40px;
-            color: rgba(255, 255, 255, 0.2);
-            white-space: nowrap;
-        }
-
-        h1 {
-            font-size: 36px;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
-    <div id="background-text">Shayokh Mohammad</div>
+    <div class="background-text">
+        Shayokh Mohammad Shayokh Mohammad Shayokh Mohammad Shayokh Mohammad Shayokh Mohammad Shayokh Mohammad
+    </div>
+
     <div class="container">
-        <h1 id="question">Do you love me? 🥰</h1>
+        <h1>Do you love me? 🥰</h1>
         <button class="btn" id="yes" onclick="loveYou()">Yes ❤️</button>
         <button class="btn" id="no" onmouseover="moveButton()" onclick="noClick()">No 😜</button>
+
         <div class="message" id="message"></div>
+        <div class="gift-box" id="gift" onclick="openGift()">🎁</div>
     </div>
 
     <script>
         let noClickCount = 0;
-        let isBgRotating = false;
 
         function moveButton() {
             let button = document.getElementById("no");
@@ -113,66 +121,40 @@
         }
 
         function noClick() {
-            let messages = [
-                "Are you sure? 😢", 
-                "Think again... 😟", 
-                "I'm breaking up with you! 💔", 
-                "Just kidding! 😂"
-            ];
-            playNoSound();
-            showMessage(messages[noClickCount % messages.length]);
-
+            let messages = ["Are you sure? 😢", "Think again... 😟", "I'm breaking up with you! 💔", "Just kidding! 😂"];
+            alert(messages[noClickCount % messages.length]);
             document.body.style.animation = "shake 0.2s";
             setTimeout(() => {
                 document.body.style.animation = "";
             }, 200);
-
             noClickCount++;
-            if (noClickCount >= 5) {
-                document.getElementById("question").innerText = "Okay... do you *at least* like me? 😢";
-            }
-
-            if (noClickCount > 7) {
-                document.body.style.transition = "background 3s ease-in-out";
-                document.body.style.backgroundColor = "black";
-            }
         }
 
         function loveYou() {
             let colors = ["#ffcccc", "#ff99cc", "#ff66cc", "#ff33cc", "#cc33ff"];
             let index = 0;
+
             setInterval(() => {
                 document.body.style.backgroundColor = colors[index % colors.length];
                 index++;
             }, 2000);
 
-            showMessage("I Knew It! You're Mine! ❤️");
-            playYesMusic();
-            startConfetti();
-            startRoseFall();
-
-            if (!isBgRotating) {
-                document.body.style.animation = "rotateBg 10s linear infinite";
-                isBgRotating = true;
-            }
-        }
-
-        function showMessage(text) {
             let message = document.getElementById("message");
             message.innerText = "";
             message.style.display = "block";
+            let text = "I Knew It! You're Mine! ❤️";
             let i = 0;
             function typeEffect() {
                 if (i < text.length) {
                     message.innerText += text.charAt(i);
                     i++;
                     setTimeout(typeEffect, 100);
+                } else {
+                    document.getElementById("gift").style.display = "block";
                 }
             }
             typeEffect();
-        }
 
-        function startConfetti() {
             for (let i = 0; i < 20; i++) {
                 let confetti = document.createElement("div");
                 confetti.innerText = "🎉";
@@ -184,26 +166,10 @@
             }
         }
 
-        function startRoseFall() {
-            for (let i = 0; i < 15; i++) {
-                let rose = document.createElement("div");
-                rose.innerText = "🌹";
-                rose.classList.add("rose");
-                rose.style.left = Math.random() * window.innerWidth + "px";
-                rose.style.top = "-50px";
-                document.body.appendChild(rose);
-                setTimeout(() => { rose.remove(); }, 2000);
-            }
-        }
-
-        function playYesMusic() {
-            let audio = new Audio('https://www.fesliyanstudios.com/play-mp3/387');
-            audio.play();
-        }
-
-        function playNoSound() {
-            let audio = new Audio('https://www.fesliyanstudios.com/play-mp3/438');
-            audio.play();
+        function openGift() {
+            let items = ["❀", "💖", "🍫", "🐰"];
+            let item = items[Math.floor(Math.random() * items.length)];
+            alert("I love you too! " + item);
         }
     </script>
 </body>
